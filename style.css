@@ -1,0 +1,238 @@
+:root
+{
+   --backgroundColor: #181C07;
+   --fontColor: #E9E2B5;
+   --accentColor: #CFB300;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: var(--backgroundColor);
+    color: var(--fontColor);
+  }
+}
+
+body
+{
+   font-family: Lato;
+   font-weight: 300;
+}
+
+*
+{
+   margin: 0;
+}
+
+#mainWindow
+{
+   display: grid;
+   height: 100vh;
+   width: 100vw;
+   grid-template-rows: 5rem 1fr;
+}
+
+#todoContainer
+{
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   max-height: 93%; 
+   overflow-y: auto;
+}
+
+#doneWindow, #todoWindow
+{
+   height: 100%;
+   overflow-y: auto;
+}
+
+#todoWindow
+{
+   border-right: 1px solid rgb( from var(--accentColor) r g b /0.3);
+   margin-left: 2.75rem;
+}
+
+#doneWindow
+{
+   margin-left: 2.75rem;
+}
+
+#inputContainer
+{
+   display: grid;
+   grid-template-columns: 3fr 0.5fr;
+   gap: 0.75rem;
+   margin: 1.25rem 1rem 2rem 0rem;
+
+}
+
+#taskInputBox
+{
+   background-color: transparent;
+   color: var(--fontColor);
+   border: none;
+   border-bottom: 1px solid rgb( from var(--accentColor) r g b /0.6);
+   padding: 0.5rem 2rem 0.5rem 1rem;
+   transition: 0.1s ease-in-out;
+
+}
+
+#taskInputBox:focus
+{
+   border-bottom-color: rgb( from var(--accentColor) r g b /0.8);
+   outline: none;
+}
+
+#taskInputBox::placeholder
+{
+   color: var(--fontColor);
+   opacity: 0.5;
+   transition: 0.1s ease-in-out;
+}
+
+#taskInputBox:focus::placeholder
+{
+   opacity: 0.7;
+}
+
+#warnText
+{
+   color: rgb(217, 83, 15);
+   font-size: 1rem;
+}
+
+#leftH1, #doneH1
+{
+   letter-spacing: 1px;
+   font-weight: 550;
+   text-decoration: underline;
+   text-underline-offset: 0.5rem;
+   text-decoration-thickness: 2px;
+   display: inline-block;
+}
+
+#doneH1
+{
+   margin-bottom: 4.75rem; /*So that the position matches todo tasks's position. Not sure if I like it tho, might be too empty*/
+}
+
+.checkboxContainer, .deleteCheckboxContainer
+{
+   width: 100%;
+   display: flex;
+   height: fit-content;
+   align-items: center;
+   overflow-wrap: normal;
+   margin-top: 1rem;
+   
+}
+
+.checkboxContainer label, .deleteCheckboxContainer label
+{
+   margin-left: 1rem;
+   margin-right: 0.5rem;
+   font-size: 1.3rem;
+   font-weight: 400;
+
+}
+
+.checkboxContainer
+{
+   animation: fadeSlide 0.2s ease-in forwards;
+}
+
+.deleteButton
+{
+   height: min-content;
+   margin-left: auto;
+   margin-right: 0.5rem;
+}
+
+.uiButton {
+   background-color: rgb(152, 123, 43);
+   padding: 0.5rem 0.75rem;
+   border-radius: 1rem;
+   border: none;
+   box-shadow: 0px 3px rgb(91, 59, 13);
+   cursor: pointer;
+   transition: 0.05s ease-out;
+   color: var(--fontColor);
+
+}
+
+.uiButton:hover
+{
+   background-color: rgb(172, 139, 48);
+}
+
+.uiButton:active {
+   box-shadow: none;
+   background-color: rgb(136, 110, 38);
+   transform: translateY(3px);
+}
+
+.deleteButton
+{
+   background-color: rgb(152, 123, 43);
+   padding: 0.5rem 0.75rem;
+   border-radius: 1rem;
+   border: none;
+   box-shadow: 0px 3px rgb(93, 55, 2);
+   cursor: pointer;
+   transition: 0.1s ease-out;
+   color: var(--fontColor);
+   margin-right: 1rem;
+}
+
+.deleteButton:hover
+{
+   background-color: rgb(137, 63, 25);
+}
+
+.deleteButton:active {
+   box-shadow: none;
+   background-color: rgb(105, 43, 11);
+   transform: translateY(3px);
+}
+
+span 
+{
+   font-size: 1rem;
+   font-weight: 300;
+   color: var(--fontColor);
+}
+
+#taskCountText, #doneCountText
+{
+   margin-left: 0.5rem;
+}
+
+@keyframes fadeSlide
+{
+   0%
+   {
+      opacity: 50%;
+      transform: translateX(-1rem);
+   }
+   100% 
+   {
+      opacity: 100%;
+      transform: translateX();
+   }
+}
+
+@keyframes deleted
+{
+   0%
+   {
+      opacity: 100%;
+   }
+   100% 
+   {
+      opacity: 0%;
+   }
+}
+
+.deleteCheckboxContainer
+{
+   animation: deleted 0.25s ease-in-out forwards;
+}
