@@ -3,6 +3,11 @@
    --backgroundColor: #181C07;
    --fontColor: #E9E2B5;
    --accentColor: #CFB300;
+   --buttonColor: rgb(152, 123, 43);
+   --buttonShadow: rgb(93, 55, 2);
+   --fontAccent: rgb(217, 83, 15);
+   --alert: rgb(137, 63, 25);
+
 }
 
 body
@@ -91,7 +96,7 @@ body
 
 #warnText
 {
-   color: rgb(217, 83, 15);
+   color: var(--fontAccent);
    font-size: 1rem;
 }
 
@@ -127,7 +132,13 @@ body
    margin-right: 0.5rem;
    font-size: 1.3rem;
    font-weight: 400;
+   cursor: pointer;
 
+}
+
+input[type="checkbox"]
+{
+   cursor: pointer;
 }
 
 .checkboxContainer
@@ -135,19 +146,12 @@ body
    animation: fadeSlide 0.2s ease-in forwards;
 }
 
-.deleteButton
-{
-   height: min-content;
-   margin-left: auto;
-   margin-right: 0.5rem;
-}
-
 .uiButton {
-   background-color: rgb(152, 123, 43);
+   background-color: var(--buttonColor);
    padding: 0.5rem 0.75rem;
    border-radius: 1rem;
    border: none;
-   box-shadow: 0px 3px rgb(91, 59, 13);
+   box-shadow: 0px 3px var(--buttonShadow);
    cursor: pointer;
    transition: 0.05s ease-out;
    color: var(--fontColor);
@@ -156,36 +160,38 @@ body
 
 .uiButton:hover
 {
-   background-color: rgb(172, 139, 48);
+   filter: brightness(1.13);
 }
 
 .uiButton:active {
    box-shadow: none;
-   background-color: rgb(136, 110, 38);
+   filter: brightness(0.895);
    transform: translateY(3px);
 }
 
 .deleteButton
 {
-   background-color: rgb(152, 123, 43);
+   background-color: var(--buttonColor);
    padding: 0.5rem 0.75rem;
    border-radius: 1rem;
    border: none;
-   box-shadow: 0px 3px rgb(93, 55, 2);
+   box-shadow: 0px 3px var(--buttonShadow);
    cursor: pointer;
    transition: 0.1s ease-out;
    color: var(--fontColor);
    margin-right: 1rem;
+   height: min-content;
+   margin-left: auto;
 }
 
 .deleteButton:hover
 {
-   background-color: rgb(137, 63, 25);
+   background-color: var(--alert);
 }
 
 .deleteButton:active {
    box-shadow: none;
-   background-color: rgb(105, 43, 11);
+   filter: brightness(0.77);
    transform: translateY(3px);
 }
 
@@ -211,7 +217,7 @@ span
    100% 
    {
       opacity: 100%;
-      transform: translateX();
+      transform: translateX(0);
    }
 }
 
@@ -229,5 +235,37 @@ span
 
 .deleteCheckboxContainer
 {
-   animation: deleted 0.25s ease-in-out forwards;
+   animation: deleted 0.15s ease-out 0.15s forwards;
+}
+
+@media (prefers-color-scheme: light) {
+  :root
+   {
+      --backgroundColor: #eaf4f4;
+      --accentColor: #386B6B;
+      --fontAccent: rgb(157, 3, 3);
+      --fontColor: #173f33;
+      --buttonColor: #b9dcc9;
+      --buttonShadow: #577568;
+      --alert: rgb(185, 66, 115);
+   }
+
+   .uiButton:hover
+   {
+      background-color: color-mix(in oklab, var(--buttonColor), black 15%);
+   }
+
+  .deleteButton:hover
+   {
+      box-shadow: 0px 3px color-mix(in oklab, var(--alert), black 40%);
+      color: rgb(249, 245, 196);
+   }
+
+   .deleteButton:active 
+   {
+   box-shadow: none;
+   filter: brightness(0.77);
+   transform: translateY(3px);
+   }
+
 }
