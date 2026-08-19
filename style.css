@@ -5,17 +5,12 @@
    --accentColor: #CFB300;
 }
 
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: var(--backgroundColor);
-    color: var(--fontColor);
-  }
-}
-
 body
 {
    font-family: Lato;
    font-weight: 300;
+   background-color: var(--backgroundColor);
+   color: var(--fontColor);
 }
 
 *
