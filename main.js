@@ -1,35 +1,40 @@
-let addBtn = document.getElementById("addBtn")
-let todoWindow = document.getElementById("todoWindow")
-let doneWindow = document.getElementById("doneWindow")
-let idNum = 0; // Setting ID at 0 initially
-let checkboxName = "checkbox"; // Setting checkbox name initially, got idea myself
-let warnText = document.getElementById("warnText")
-let taskInputBox = document.getElementById("taskInputBox");
+let taskInput = document.getElementById("taskInput");
+let addTaskBtn = document.getElementById("addTaskBtn");
+let todoWindow = document.getElementById("todoWindow");
+let doneWindow = document.getElementById("doneWindow");
+let leftCountText = document.getElementById("leftCountText");
+let doneCountText = document.getElementById("doneCountText");
+let leftTask;
+let doneTask;
+let id = 0;
+let allTasks = [];
 
-calcLeft()
-calcDone()
+class Task
+{
+   constructor(label, id, isChecked=false)
+   {
+      this.label = label,
+      this.id = id,
+      this.isChecked = isChecked
+   }
+}
 
-addBtn.addEventListener("click", createNewTask);
-taskInputBox.addEventListener("keydown", handleEnter)
-
+taskInput.addEventListener("keydown", handleEnter)
 function handleEnter(event)
 {
    if(event.key === "Enter")
    {
       event.preventDefault()
-      createNewTask()
+      createTask()
    }
-}
+} // so user can press enter to enter a task
 
-function createNewTask() 
+addTaskBtn.addEventListener("click", createTask)
+
+function createTask()
 {
-   idNum += 1; 
-   let checkboxID;
-   let checkbox;
-   let containerID;
-   let taskName = taskInputBox.value.trim();
-
-   if (taskName == false)
+   let label = taskInput.value.trim();
+   if (label == false)
    {
       warnText.textContent = "You cannot add an empty Task"
       return;
@@ -39,90 +44,111 @@ function createNewTask()
       warnText.textContent = '';
    }
 
-   let checkboxContainer = document.createElement(`div`);
-   checkboxContainer.setAttribute(`class`,  `checkboxContainer`);
+   id += 1;
+
+   let newTask = new Task(label, id)
+   allTasks.push(newTask)
+
+   countLeftTasks()
+   renderTask(newTask);
+
+   // console.log(allTasks);
+}
+
+function countLeftTasks() 
+{
+
+   let uncheckedTask = allTasks.filter(task => task.isChecked === false);
+   leftTask = uncheckedTask.length;
+   // console.log(`There are ${uncheckedTask.length} unchecked tasks`)
    
-   let newCheckbox = document.createElement(`input`)
-   newCheckbox.setAttribute(`type`, `checkbox`)
-   newCheckbox.setAttribute(`id`, `${checkboxName}${idNum}`)
+}
+
+function countDoneTasks() 
+{
+
+   let checkedTask = allTasks.filter(task => task.isChecked === true);
+   doneTask = checkedTask.length;
+   // console.log(`There are ${checkedTask.length} checked tasks`)
    
-   let newLabel = document.createElement("label")
-   newLabel.setAttribute(`for`, `${checkboxName}${idNum}`)
-   newLabel.setAttribute(`class`, `taskName`);
-   newLabel.setAttribute(`id`, `taskName${idNum}`)
-   newLabel.textContent = `${taskName}`;
+}
 
-   let deleteButton = document.createElement(`button`)
-   deleteButton.setAttribute(`class`, `deleteButton`)
-   deleteButton.textContent = `Delete`
+function renderTask(taskObject) 
+{
 
-   checkboxID = `${checkboxName}${idNum}`;
-   
-  // console.log(checkboxID)
+   taskInput.value = "";
 
-   checkboxContainer.append(newCheckbox)
-   checkboxContainer.append(newLabel) 
-   checkboxContainer.append(deleteButton)
-   todoWindow.append(checkboxContainer)
+   let taskContainer = document.createElement(`div`)
+   taskContainer.setAttribute(`class`, `taskContainer`)
 
-   checkbox = document.getElementById(`${checkboxID}`);
+   let newCheckbox = document.createElement(`input`);
+   newCheckbox.setAttribute(`type`, `checkbox`);
+   newCheckbox.setAttribute(`id`, `${taskObject.id}`);
 
-   calcLeft()
+   let newLabel = document.createElement(`label`);
+   newLabel.setAttribute(`for`, `${taskObject.id}`);
+   newLabel.textContent = taskObject.label;
 
-   taskInputBox.value = ``;
+   let deleteBtn = document.createElement(`button`);
+   deleteBtn.setAttribute(`class`, `deleteButton`)
+   deleteBtn.textContent = `Delete`;
 
-   // console.log(checkbox);
+   taskContainer.append(newCheckbox)
+   taskContainer.append(newLabel)
+   taskContainer.append(deleteBtn)
+   todoWindow.append(taskContainer)
 
-   checkbox.onclick = function() 
+   leftCountText.textContent = `(${leftTask})`;
+
+   newCheckbox.onclick = function()
    {
-      if(checkbox.checked) {
-         doneWindow.append(checkboxContainer)
+      if(taskObject.isChecked === false)
+      {
+         taskObject.isChecked = newCheckbox.checked; // makes it true, since .checked will return true
          newLabel.style.textDecoration = "line-through";
-         calcDone()
-         calcLeft()
+         doneWindow.append(taskContainer);
+         countDoneTasks()
+         countLeftTasks()
+         leftCountText.textContent = `(${leftTask})`;
+         doneCountText.textContent = `(${doneTask})`;
+         // console.log(`The #${taskObject.id} checkbox is ${taskObject.isChecked}`)
+         //console.log(allTasks)
       }
-      else {
-         newLabel.style.textDecoration = "none"
-         todoWindow.append(checkboxContainer)
-         calcDone()
-         calcLeft()
-      };
-   } 
+      else
+      {
+         taskObject.isChecked = newCheckbox.checked;
+         newLabel.style.textDecoration = "none";
+         todoWindow.append(taskContainer)
+         countDoneTasks()
+         countLeftTasks()
+         leftCountText.textContent = `(${leftTask})`;
+         doneCountText.textContent = `(${doneTask})`;
+         // console.log(`The #${taskObject.id} checkbox is ${taskObject.isChecked}`)
+         // console.log(allTasks)
+      }
+   };
 
-   deleteButton.addEventListener("click", deleteAnimation)
+   deleteBtn.addEventListener("click", deleteAnimation)
 
    function deleteAnimation()
    {
-      checkboxContainer.setAttribute("class", "deleteCheckboxContainer")
-      checkboxContainer.addEventListener("animationend", deleteTask)
-      
+      taskContainer.setAttribute("class", "deleteTaskContainer")
+      taskContainer.addEventListener("animationend", deleteTask)
+      //console.log("deleteAnimation ran");
+
       function deleteTask()
       {
-         checkboxContainer.remove()
-         calcLeft()
-         calcDone()
+         // console.log("animation ended");
+         let indexOfTask = allTasks.indexOf(taskObject);
+         allTasks.splice(indexOfTask, 1)
+         // console.log(allTasks)
+         taskContainer.remove()
+         countDoneTasks()
+         countLeftTasks()
+         leftCountText.textContent = `(${leftTask})`;
+         doneCountText.textContent = `(${doneTask})`;
       }
 
    };
 
-};
-
-function calcLeft() 
-{
-   let todoWindow = document.getElementById("todoWindow");
-   let taskCountText = document.getElementById("taskCountText");
-   let totalContainers = todoWindow.getElementsByClassName("checkboxContainer");
-   let taskNum = totalContainers.length;
-
-   taskCountText.textContent = `(${taskNum})`
-}
-
-function calcDone() 
-{
-   let doneWindow = document.getElementById("doneWindow");
-   let doneCountText = document.getElementById("doneCountText");
-   let totalContainers = doneWindow.getElementsByClassName("checkboxContainer");
-   let taskNum = totalContainers.length;
-
-   doneCountText.textContent = `(${taskNum})`
 }

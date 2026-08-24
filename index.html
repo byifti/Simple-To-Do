@@ -3,13 +3,12 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Demo To Do List</title>
+   <title>Habit Tracker</title>
    <link rel="stylesheet" href="style.css">
    <link rel="preconnect" href="https://fonts.googleapis.com">
    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
 <div id="mainWindow">
@@ -21,28 +20,31 @@
 <div id="todoContainer">
 
    <div id="todoWindow">
-      <div id="todoHeader">
-         <h1 id="leftH1">Left</h1>
-         <span id="taskCountText"></span>
+
+      <div id="leftHeader">
+         <h1 id="leftHeading">Left</h1>
+         <span id="leftCountText"></span>
       </div>
+
       <div id="inputContainer">
-         <input id="taskInputBox" type="text" placeholder="Enter Task Name">
-         <button class="uiButton" id="addBtn">New task</button> 
+         <input id="taskInput" type="text" placeholder="Enter Task Name">
+         <button id="addTaskBtn" class="uiButton">Add</button> 
          <p id="warnText"></p>
       </div>
+      
    </div>
 
    <div id="doneWindow">
       <div id="doneHeader">
-         <h1 id="doneH1">Done</h1>
+         <h1 id="doneHeading">Done</h1>
          <span id="doneCountText"></span>
       </div>
    </div>
 
 </div>
 
-</div>
 
+</div>
 
 <script src="main.js"></script>
 </body>
