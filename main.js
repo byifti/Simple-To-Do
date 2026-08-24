@@ -9,6 +9,36 @@ let doneTask;
 let id = 0;
 let allTasks = [];
 
+function loadData()
+{
+   id = JSON.parse(localStorage.getItem(`Id`));
+
+   let dataString = localStorage.getItem(`Tasks`);
+   if (dataString === null ) // without this, array becomes null and rest of the script breaks
+   {
+      return
+   }
+   else 
+   {
+      allTasks = JSON.parse(dataString);
+   }
+
+   for(let task of allTasks)
+   {
+      renderTask(task)
+   }
+
+}
+
+function genID()
+{
+   id += 1
+   let idString = JSON.stringify(id)
+   localStorage.setItem(`Id`, `${idString}`)
+}
+
+window.addEventListener("DOMContentLoaded", loadData)
+
 class Task
 {
    constructor(label, id, isChecked=false)
@@ -44,12 +74,13 @@ function createTask()
       warnText.textContent = '';
    }
 
-   id += 1;
+   genID()
 
    let newTask = new Task(label, id)
    allTasks.push(newTask)
 
-   countLeftTasks()
+   saveData(allTasks);
+   countLeftTasks();
    renderTask(newTask);
 
    // console.log(allTasks);
@@ -104,29 +135,47 @@ function renderTask(taskObject)
    {
       if(taskObject.isChecked === false)
       {
-         taskObject.isChecked = newCheckbox.checked; // makes it true, since .checked will return true
+         taskObject.isChecked = true; // makes it true, since .checked will return true
+         saveData(allTasks)
+         renderCheckboxState()
+         // console.log(`The #${taskObject.id} checkbox is ${taskObject.isChecked}`)
+         //console.log(allTasks)
+      }
+      else
+      {
+         taskObject.isChecked = false;
+         saveData(allTasks)
+         renderCheckboxState()
+         // console.log(`The #${taskObject.id} checkbox is ${taskObject.isChecked}`)
+         // console.log(allTasks)
+      }
+   };
+
+   renderCheckboxState()
+
+   function renderCheckboxState() 
+   {
+      if(taskObject.isChecked)
+      {
+         newCheckbox.checked = taskObject.isChecked;
          newLabel.style.textDecoration = "line-through";
          doneWindow.append(taskContainer);
          countDoneTasks()
          countLeftTasks()
          leftCountText.textContent = `(${leftTask})`;
          doneCountText.textContent = `(${doneTask})`;
-         // console.log(`The #${taskObject.id} checkbox is ${taskObject.isChecked}`)
-         //console.log(allTasks)
       }
       else
       {
-         taskObject.isChecked = newCheckbox.checked;
+         newCheckbox.checked = taskObject.isChecked;
          newLabel.style.textDecoration = "none";
-         todoWindow.append(taskContainer)
+         todoWindow.append(taskContainer);
          countDoneTasks()
          countLeftTasks()
          leftCountText.textContent = `(${leftTask})`;
          doneCountText.textContent = `(${doneTask})`;
-         // console.log(`The #${taskObject.id} checkbox is ${taskObject.isChecked}`)
-         // console.log(allTasks)
       }
-   };
+   }
 
    deleteBtn.addEventListener("click", deleteAnimation)
 
@@ -141,6 +190,7 @@ function renderTask(taskObject)
          // console.log("animation ended");
          let indexOfTask = allTasks.indexOf(taskObject);
          allTasks.splice(indexOfTask, 1)
+         deleteData(allTasks)
          // console.log(allTasks)
          taskContainer.remove()
          countDoneTasks()
@@ -151,4 +201,16 @@ function renderTask(taskObject)
 
    };
 
+}
+
+function saveData(arrayOfObjects) 
+{
+   let dataString = JSON.stringify(arrayOfObjects);
+   localStorage.setItem(`Tasks`,`${dataString}`);
+}
+
+function deleteData(arrayOfObjects)
+{
+   let dataString = JSON.stringify(arrayOfObjects);
+   localStorage.setItem(`Tasks`,`${dataString}`);
 }
