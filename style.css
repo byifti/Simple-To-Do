@@ -10,6 +10,13 @@
 
 }
 
+span, h1, h2, h3, h4, h5, h6, p
+{
+   animation: fadeIn 0.35s ease-in-out forwards;
+}
+
+
+
 body
 {
    font-family: Lato;
@@ -227,6 +234,20 @@ input[type="checkbox"]
    100% 
    {
       opacity: 0%;
+   }
+}
+
+@keyframes fadeIn
+{
+   0%
+   {
+      opacity: 50%;
+      transform: translateY(-1rem);
+   }
+   100%
+   {
+      opacity: 100%;
+      transform: translateY(0);
    }
 }
 
